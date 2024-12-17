@@ -1,58 +1,55 @@
 import pytest
+import Locators
 
-from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
-def test_jumps_to_sauces(Email, Password, locator_email_login, locator_password_login, locator_button_login):
-    driver = webdriver.Chrome()
-    driver.get("https://stellarburgers.nomoreparties.site/login")
+url_login = "https://stellarburgers.nomoreparties.site/login"
+def test_jumps_to_sauces(Email, Password, driver):
 
-    driver.find_element(By.XPATH, locator_email_login).send_keys(Email)
-    driver.find_element(By.XPATH, locator_password_login).send_keys(Password)
-    driver.find_element(By.XPATH, locator_button_login).click()
+    driver.get(url_login)
 
-    WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located((By.XPATH, "//h1[text() = 'Соберите бургер']")))
-    driver.find_element(By.XPATH, "//span[text() = 'Соусы']").click()
+    driver.find_element(*Locators.EMAIL_INPUT_LOGIN).send_keys(Email)
+    driver.find_element(*Locators.PASSWORD_INPUT).send_keys(Password)
+    driver.find_element(*Locators.BUTTON_LOGIN).click()
 
     WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located((By.XPATH, "//h2[text() = 'Соусы']")))
-    assert driver.find_element(By.XPATH, "//h2[text() = 'Соусы']").text == "Соусы"
-    driver.quit()
-
-def test_jumps_to_fillings(Email, Password, locator_email_login, locator_password_login, locator_button_login):
-    driver = webdriver.Chrome()
-    driver.get("https://stellarburgers.nomoreparties.site/login")
-
-    driver.find_element(By.XPATH, locator_email_login).send_keys(Email)
-    driver.find_element(By.XPATH, locator_password_login).send_keys(Password)
-    driver.find_element(By.XPATH, locator_button_login).click()
+        expected_conditions.visibility_of_element_located(Locators.CONSTRUCTOR_TITLE))
+    driver.find_element(*Locators.SAUCE_TAB).click()
 
     WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located((By.XPATH, "//h1[text() = 'Соберите бургер']")))
-    driver.find_element(By.XPATH, "//span[text() = 'Начинки']").click()
+        expected_conditions.visibility_of_element_located((Locators.SAUCE_TITLE)))
+    assert driver.find_element(*Locators.SAUCE_TITLE).text == "Соусы"
+
+def test_jumps_to_fillings(Email, Password, driver):
+
+    driver.get(url_login)
+
+    driver.find_element(*Locators.EMAIL_INPUT_LOGIN).send_keys(Email)
+    driver.find_element(*Locators.PASSWORD_INPUT).send_keys(Password)
+    driver.find_element(*Locators.BUTTON_LOGIN).click()
 
     WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located((By.XPATH, "//h2[text() = 'Начинки']")))
-    assert driver.find_element(By.XPATH, "//h2[text() = 'Начинки']").text == "Начинки"
-    driver.quit()
-
-def test_jumps_to_rolls(Email, Password, locator_email_login, locator_password_login, locator_button_login):
-    driver = webdriver.Chrome()
-    driver.get("https://stellarburgers.nomoreparties.site/login")
-
-    driver.find_element(By.XPATH, locator_email_login).send_keys(Email)
-    driver.find_element(By.XPATH, locator_password_login).send_keys(Password)
-    driver.find_element(By.XPATH, locator_button_login).click()
+        expected_conditions.visibility_of_element_located(Locators.CONSTRUCTOR_TITLE))
+    driver.find_element(*Locators.FILLINGS_TAB).click()
 
     WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located((By.XPATH, "//h1[text() = 'Соберите бургер']")))
-    driver.find_element(By.XPATH, "//span[text() = 'Начинки']").click()
-    driver.find_element(By.XPATH, "//span[text() = 'Булки']").click()
+        expected_conditions.visibility_of_element_located(Locators.FILLINGS_TITLE))
+    assert driver.find_element(*Locators.FILLINGS_TITLE).text == "Начинки"
+
+def test_jumps_to_rolls(Email, Password, driver):
+
+    driver.get(url_login)
+
+    driver.find_element(*Locators.EMAIL_INPUT_LOGIN).send_keys(Email)
+    driver.find_element(*Locators.PASSWORD_INPUT).send_keys(Password)
+    driver.find_element(*Locators.BUTTON_LOGIN).click()
 
     WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located((By.XPATH, "//h2[text() = 'Булки']")))
-    assert driver.find_element(By.XPATH, "//h2[text() = 'Булки']").text == "Булки"
-    driver.quit()
+        expected_conditions.visibility_of_element_located(Locators.CONSTRUCTOR_TITLE))
+    driver.find_element(*Locators.FILLINGS_TAB).click()
+    driver.find_element(*Locators.BUN_TAB).click()
+
+    WebDriverWait(driver, 5).until(
+        expected_conditions.visibility_of_element_located((Locators.BUN_TITLE)))
+    assert driver.find_element(*Locators.BUN_TITLE).text == "Булки"

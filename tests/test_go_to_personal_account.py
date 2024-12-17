@@ -1,21 +1,20 @@
 import pytest
+import Locators
 
-from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
-def test_go_to_personal_account_page(Email, Password, locator_email_login, locator_password_login, locator_button_login):
-    driver = webdriver.Chrome()
-    driver.get("https://stellarburgers.nomoreparties.site/login")
+url_login = "https://stellarburgers.nomoreparties.site/login"
+def test_go_to_personal_account_page(Email, Password, driver):
 
-    driver.find_element(By.XPATH, locator_email_login).send_keys(Email)
-    driver.find_element(By.XPATH, locator_password_login).send_keys(Password)
-    driver.find_element(By.XPATH, locator_button_login).click()
+    driver.get(url_login)
 
-    WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located((By.XPATH, "//p[text() = 'Личный Кабинет']")))
-    driver.find_element(By.XPATH, "//p[text() = 'Личный Кабинет']").click()
+    driver.find_element(*Locators.EMAIL_INPUT_LOGIN).send_keys(Email)
+    driver.find_element(*Locators.PASSWORD_INPUT).send_keys(Password)
+    driver.find_element(*Locators.BUTTON_LOGIN).click()
 
-    WebDriverWait(driver, 5).until(expected_conditions.visibility_of_element_located((By.XPATH, "//a[text() = 'Профиль']")))
+    WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located(Locators.PERSONAL_ACCOUNT_BUTTON))
+    driver.find_element(*Locators.PERSONAL_ACCOUNT_BUTTON).click()
+
+    WebDriverWait(driver, 5).until(expected_conditions.visibility_of_element_located(Locators.PROFILE_BUTTON))
     assert driver.current_url == "https://stellarburgers.nomoreparties.site/account/profile"
-    driver.quit()

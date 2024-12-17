@@ -1,5 +1,6 @@
 import pytest
 import random as r
+from selenium import webdriver
 
 @pytest.fixture
 def Email():
@@ -17,15 +18,7 @@ def Password():
     return password
 
 @pytest.fixture
-def locator_email_login():
-    locator = "//input[@name = 'name']"
-    return locator
-
-@pytest.fixture
-def locator_password_login():
-    locator = "//input[@name = 'Пароль']"
-    return locator
-@pytest.fixture
-def locator_button_login():
-    locator = "//button[text() = 'Войти']"
-    return locator
+def driver():
+    browser = webdriver.Chrome()
+    yield browser
+    browser.quit()
